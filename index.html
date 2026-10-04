@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adverbs of Frequency Master</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#f7f4ef;
+  --card:#ffffff;
+  --text:#27303b;
+  --muted:#6f7782;
+  --lav:#dcd6f7;
+  --sage:#dce8dc;
+  --blue:#d9e6f2;
+  --peach:#f5dfd2;
+  --line:#e7e3dc;
+  --accent:#6c6b92;
+  --success:#58765f;
+  --soft-success:#edf6ef;
+  --soft-error:#fbefeb;
+  --error:#925f56;
+  --shadow:0 14px 38px rgba(44,51,61,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+button{font:inherit}
+.app{
+  width:min(980px,92vw);
+  margin:0 auto;
+  padding:38px 0 60px;
+}
+.screen{display:none}
+.screen.active{display:block}
+.hero{
+  min-height:76vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero-card,.panel,.question-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+}
+.hero-card{
+  width:min(760px,100%);
+  text-align:center;
+  padding:64px 40px;
+}
+.badge{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:999px;
+  background:var(--lav);
+  color:#565276;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+h1{
+  font-size:clamp(34px,5vw,58px);
+  line-height:1.05;
+  margin:22px 0 14px;
+  letter-spacing:-.04em;
+}
+.subtitle{color:var(--muted);font-size:18px;margin-bottom:34px}
+.btn{
+  border:0;
+  border-radius:14px;
+  padding:14px 22px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.18s ease;
+  background:#efedf8;
+  color:#4e4c6b;
+}
+.btn:hover{transform:translateY(-1px);filter:brightness(.985)}
+.btn.primary{background:var(--accent);color:white}
+.btn.secondary{background:#eef2f5;color:#40505b}
+.btn.ghost{background:#f8f7f4;border:1px solid var(--line);color:#4e5661}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  margin-bottom:16px;
+}
+.game-title{
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.stats{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.stat{
+  background:white;
+  border:1px solid var(--line);
+  padding:9px 13px;
+  border-radius:999px;
+  color:#525b66;
+  font-size:14px;
+  font-weight:600;
+}
+.progress-wrap{
+  height:9px;
+  border-radius:999px;
+  background:#ece8e2;
+  overflow:hidden;
+  margin-bottom:22px;
+}
+.progress-bar{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#b7b2dc,#a9c7b1);
+  transition:width .3s ease;
+}
+.question-card{padding:34px}
+.eyebrow{
+  font-size:13px;
+  font-weight:700;
+  color:#7e789f;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:10px;
+}
+.question{
+  font-size:clamp(22px,3vw,31px);
+  line-height:1.35;
+  margin:0 0 26px;
+  letter-spacing:-.02em;
+}
+.options{
+  display:grid;
+  gap:12px;
+}
+.option{
+  width:100%;
+  text-align:left;
+  border:1px solid var(--line);
+  background:#fbfaf8;
+  color:var(--text);
+  border-radius:16px;
+  padding:16px 18px;
+  cursor:pointer;
+  transition:.15s ease;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.option:hover{background:#f3f0eb}
+.option.selected{border-color:#a9a3d4;background:#f1effa}
+.option.correct{border-color:#91b19a;background:var(--soft-success)}
+.option.incorrect{border-color:#d7aba0;background:var(--soft-error)}
+.letter{
+  width:28px;height:28px;border-radius:8px;
+  background:#eeece8;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;flex:0 0 auto;
+}
+.feedback{
+  margin-top:20px;
+  border-radius:16px;
+  padding:16px 18px;
+  display:none;
+  animation:pop .22s ease;
+}
+.feedback.show{display:block}
+.feedback.good{background:var(--soft-success);color:var(--success)}
+.feedback.try{background:var(--soft-error);color:var(--error)}
+.feedback strong{display:block;margin-bottom:4px}
+@keyframes pop{from{transform:scale(.98);opacity:.2}to{transform:scale(1);opacity:1}}
+.actions{
+  margin-top:22px;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.section-card{
+  width:min(700px,100%);
+  margin:12vh auto 0;
+  text-align:center;
+  padding:52px 34px;
+}
+.section-card h2{font-size:40px;margin:12px 0}
+.section-card p{color:var(--muted);font-size:17px}
+.word-bank,.answer-zone{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:16px;
+  border-radius:16px;
+  min-height:74px;
+}
+.word-bank{
+  background:#f4f2ee;
+  border:1px solid #e5e0d9;
+  margin-top:10px;
+}
+.answer-zone{
+  background:#fcfbf9;
+  border:2px dashed #d9d2ca;
+  margin-top:16px;
+}
+.word{
+  padding:10px 13px;
+  border-radius:12px;
+  background:white;
+  border:1px solid #ddd8d1;
+  box-shadow:0 4px 10px rgba(38,45,50,.05);
+  cursor:pointer;
+  user-select:none;
+  font-size:15px;
+}
+.word:hover{transform:translateY(-1px)}
+.hint{font-size:13px;color:var(--muted);margin-top:8px}
+.results{
+  width:min(760px,100%);
+  margin:7vh auto 0;
+  padding:50px 38px;
+  text-align:center;
+}
+.score-big{
+  font-size:64px;
+  font-weight:700;
+  letter-spacing:-.05em;
+  margin:18px 0 4px;
+}
+.result-msg{font-size:18px;color:var(--muted);margin-bottom:28px}
+.review-list{display:grid;gap:14px;margin-top:22px}
+.review-item{
+  background:white;border:1px solid var(--line);border-radius:18px;
+  padding:18px;text-align:left
+}
+.review-item h4{margin:0 0 10px;font-size:15px}
+.review-item p{margin:6px 0;color:#58616c;line-height:1.5}
+.tag{
+  display:inline-block;padding:5px 9px;border-radius:999px;
+  font-size:12px;font-weight:700
+}
+.tag.ok{background:var(--soft-success);color:var(--success)}
+.tag.no{background:var(--soft-error);color:var(--error)}
+.rule-box{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:26px;
+}
+.rule{
+  text-align:left;
+  border-radius:16px;
+  padding:16px;
+  background:#faf8f5;
+  border:1px solid var(--line);
+  color:#59616b;
+  font-size:14px;
+  line-height:1.45;
+}
+.rule b{color:var(--text)}
+@media(max-width:720px){
+  .app{padding-top:20px}
+  .hero-card{padding:42px 24px}
+  .question-card{padding:24px}
+  .topbar{align-items:flex-start;flex-direction:column}
+  .rule-box{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <section id="startScreen" class="screen active hero">
+    <div class="hero-card">
+      <span class="badge">Grammar Revision · A2</span>
+      <h1>ADVERBS OF FREQUENCY MASTER</h1>
+      <p class="subtitle">Test your grammar skills!</p>
+      <button class="btn primary" onclick="startMixedGame()">START</button>
+
+      <div class="rule-box">
+        <div class="rule"><b>Main verbs</b><br>Adverb usually comes before the main verb.<br><em>I usually study at night.</em></div>
+        <div class="rule"><b>Verb “to be”</b><br>Adverb usually comes after <em>am/is/are</em>.<br><em>She is often tired.</em></div>
+        <div class="rule"><b>Auxiliaries / modals</b><br>Adverb comes after the auxiliary/modal.<br><em>We can always ask.</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="partIntro" class="screen">
+    <div class="panel section-card">
+      <span class="badge">Part 1</span>
+      <h2>Multiple Choice</h2>
+      <p>15 questions · Choose the sentence with the correct word order.</p>
+      <button class="btn primary" onclick="beginPart1()">BEGIN</button>
+    </div>
+  </section>
+
+  <section id="gameScreen" class="screen">
+    <div class="topbar">
+      <div class="game-title">ADVERBS OF FREQUENCY MASTER</div>
+      <div class="stats">
+        <div id="progressText" class="stat">Question 1 / 30</div>
+        <div id="scoreText" class="stat">Score: 0</div>
+      </div>
+    </div>
+    <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+
+    <div class="question-card">
+      <div id="partLabel" class="eyebrow">Part 1 · Multiple Choice</div>
+      <h2 id="questionText" class="question"></h2>
+
+      <div id="mcqArea" class="options"></div>
+
+      <div id="unscrambleArea" style="display:none">
+        <div class="hint">Click or drag the words into the answer area.</div>
+        <div id="wordBank" class="word-bank"></div>
+        <div id="answerZone" class="answer-zone"></div>
+      </div>
+
+      <div id="feedback" class="feedback"></div>
+
+      <div class="actions">
+        <button id="resetBtn" class="btn ghost" style="display:none" onclick="resetUnscramble()">RESET</button>
+        <button id="checkBtn" class="btn secondary" style="display:none" onclick="checkUnscramble()">CHECK ANSWER</button>
+        <button id="nextBtn" class="btn primary" style="display:none" onclick="nextQuestion()">NEXT QUESTION</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="part2Intro" class="screen">
+    <div class="panel section-card">
+      <span class="badge">Part 1 Complete</span>
+      <h2>Great work!</h2>
+      <p>Now let’s unscramble some sentences.</p>
+      <button class="btn primary" onclick="beginPart2()">CONTINUE</button>
+    </div>
+  </section>
+
+  <section id="resultScreen" class="screen">
+    <div class="panel results">
+      <span class="badge">Completed</span>
+      <h2 style="font-size:36px;margin-bottom:0">ADVERBS OF FREQUENCY MASTER</h2>
+      <div id="finalScore" class="score-big">0 / 30</div>
+      <div id="resultMessage" class="result-msg"></div>
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+        <button class="btn primary" onclick="restartGame()">PLAY AGAIN</button>
+        <button class="btn secondary" onclick="showReview()">REVIEW ANSWERS</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviewScreen" class="screen">
+    <div class="topbar">
+      <div class="game-title">REVIEW ANSWERS</div>
+      <button class="btn ghost" onclick="showResults()">BACK TO RESULTS</button>
+    </div>
+    <div id="reviewList" class="review-list"></div>
+  </section>
+
+</div>
+
+<script>
+const positiveMessages = [
+  "Good job! Keep going!",
+  "Excellent! You got it!",
+  "Great work! Keep it up!",
+  "Well done! Next one!",
+  "Perfect! Keep going!",
+  "Nice work!",
+  "Correct! You’re doing great!"
+];
+
+const mcqs = [
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "I usually check my email before class.",
+      "I check usually my email before class.",
+      "Usually I check my email before class every day.",
+      "I check my email usually before every class."
+    ], answer:0
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "My classmates often are tired after long lectures.",
+      "My classmates are often tired after long lectures.",
+      "My classmates are tired often after long lectures.",
+      "Often my classmates are tired after long lectures."
+    ], answer:1
+  },
+  {
+    q:"Which sentence has the correct word order?",
+    options:[
+      "She goes never to the library on Sundays.",
+      "Never she goes to the library on Sundays.",
+      "She never goes to the library on Sundays.",
+      "She goes to the library never on Sundays."
+    ], answer:2
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "Our tutor gives sometimes us extra practice.",
+      "Our tutor gives us sometimes extra practice.",
+      "Sometimes our tutor gives us extra practice every week.",
+      "Our tutor sometimes gives us extra practice."
+    ], answer:3
+  },
+  {
+    q:"Choose the correct sentence with a modal verb.",
+    options:[
+      "Students can always ask questions after class.",
+      "Students always can ask questions after class.",
+      "Students can ask always questions after class.",
+      "Always students can ask questions after class."
+    ], answer:0
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "I am late rarely for my morning lecture.",
+      "I am rarely late for my morning lecture.",
+      "I rarely am late for my morning lecture.",
+      "Rarely I am late for my morning lecture."
+    ], answer:1
+  },
+  {
+    q:"Which sentence is correct?",
+    options:[
+      "They have completed never an assignment late.",
+      "They never have completed an assignment late.",
+      "They have never completed an assignment late.",
+      "They have completed an assignment never late."
+    ], answer:2
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "We use hardly ever social media during lessons.",
+      "We use social media hardly ever during lessons.",
+      "Hardly ever we use social media during lessons.",
+      "We hardly ever use social media during lessons."
+    ], answer:3
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "He often works part-time at the weekend.",
+      "He works often part-time at the weekend.",
+      "He works part-time often at the weekend.",
+      "Often he works part-time every weekend."
+    ], answer:0
+  },
+  {
+    q:"Which sentence is correct?",
+    options:[
+      "Our presentations usually are quite short.",
+      "Our presentations are usually quite short.",
+      "Our presentations are quite short usually.",
+      "Usually are our presentations quite short."
+    ], answer:1
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "I don't drink usually coffee in the evening.",
+      "I usually don't drink coffee in the evening.",
+      "I don't usually drink coffee in the evening.",
+      "I don't drink coffee usually in the evening."
+    ], answer:2
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "She can finish usually her work before 6 p.m.",
+      "She usually can finish her work before 6 p.m.",
+      "Usually she can finish her work before 6 p.m. every day.",
+      "She can usually finish her work before 6 p.m."
+    ], answer:3
+  },
+  {
+    q:"Which sentence has the correct word order?",
+    options:[
+      "We occasionally meet at a café after class.",
+      "We meet occasionally at a café after class every time.",
+      "We meet at a café occasionally after every class.",
+      "Occasionally we meet at a café after class each day."
+    ], answer:0
+  },
+  {
+    q:"Choose the correct sentence.",
+    options:[
+      "The computer room rarely is crowded in the morning.",
+      "The computer room is rarely crowded in the morning.",
+      "The computer room is crowded rarely in the morning.",
+      "Rarely the computer room is crowded in the morning."
+    ], answer:1
+  },
+  {
+    q:"Which question uses the adverb correctly?",
+    options:[
+      "Do usually you study with friends?",
+      "Usually do you study with friends?",
+      "Do you usually study with friends?",
+      "Do you study usually with friends?"
+    ], answer:2
+  }
+];
+
+const unscrambles = [
+  {words:["I","usually","review","my notes","after class"], answer:"I usually review my notes after class."},
+  {words:["My friends","often","study","in the library","together"], answer:"My friends often study in the library together."},
+  {words:["We","sometimes","meet","for coffee","after lectures"], answer:"We sometimes meet for coffee after lectures."},
+  {words:["She","rarely","uses","her phone","during class"], answer:"She rarely uses her phone during class."},
+  {words:["They","occasionally","join","university events","at weekends"], answer:"They occasionally join university events at weekends."},
+
+  {words:["Our lecturer","is","usually","on time"], answer:"Our lecturer is usually on time."},
+  {words:["The library","is","often","quiet","in the morning"], answer:"The library is often quiet in the morning."},
+  {words:["I","am","sometimes","tired","after evening classes"], answer:"I am sometimes tired after evening classes."},
+  {words:["The classrooms","are","rarely","empty","at noon"], answer:"The classrooms are rarely empty at noon."},
+  {words:["My classmates","are","hardly ever","late","for presentations"], answer:"My classmates are hardly ever late for presentations."},
+
+  {words:["Students","can","always","ask","for help"], answer:"Students can always ask for help."},
+  {words:["I","have","never","missed","an important deadline"], answer:"I have never missed an important deadline."},
+  {words:["We","do not","usually","study","after midnight"], answer:"We do not usually study after midnight."},
+  {words:["She","can","often","finish","her tasks","early"], answer:"She can often finish her tasks early."},
+  {words:["They","have","rarely","worked","on group projects","online"], answer:"They have rarely worked on group projects online."}
+];
+
+let index=0;
+let score=0;
+let answered=false;
+let reviews=[];
+let currentWords=[];
+let placedWords=[];
+let questionPool=[];
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function buildQuestionPool(){
+  questionPool = [
+    ...mcqs.map((q,i)=>({type:'mcq', sourceIndex:i})),
+    ...unscrambles.map((q,i)=>({type:'unscramble', sourceIndex:i}))
+  ];
+  shuffle(questionPool);
+}
+
+function startMixedGame(){
+  score=0;
+  index=0;
+  answered=false;
+  reviews=[];
+  currentWords=[];
+  placedWords=[];
+  buildQuestionPool();
+  renderQuestion();
+  showScreen('gameScreen');
+}
+
+function globalQuestionNumber(){
+  return index+1;
+}
+
+function updateTop(){
+  const n=globalQuestionNumber();
+  document.getElementById('progressText').textContent=`Question ${n} / 30`;
+  document.getElementById('scoreText').textContent=`Score: ${score}`;
+  document.getElementById('progressBar').style.width=`${(n-1)/30*100}%`;
+}
+
+function renderQuestion(){
+  answered=false;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('feedback').innerHTML='';
+  document.getElementById('nextBtn').style.display='none';
+  updateTop();
+
+  const qref = questionPool[index];
+
+  if(qref.type==='mcq'){
+    document.getElementById('partLabel').textContent='Multiple Choice';
+    const item=mcqs[qref.sourceIndex];
+    document.getElementById('questionText').textContent=item.q;
+    document.getElementById('mcqArea').style.display='grid';
+    document.getElementById('unscrambleArea').style.display='none';
+    document.getElementById('resetBtn').style.display='none';
+    document.getElementById('checkBtn').style.display='none';
+    const area=document.getElementById('mcqArea');
+    area.innerHTML='';
+    item.options.forEach((opt,i)=>{
+      const b=document.createElement('button');
+      b.className='option';
+      b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${opt}</span>`;
+      b.onclick=()=>checkMCQ(i,b);
+      area.appendChild(b);
+    });
+  } else {
+    document.getElementById('partLabel').textContent='Unscramble the Sentence';
+    document.getElementById('questionText').textContent='Put the words in the correct order.';
+    document.getElementById('mcqArea').style.display='none';
+    document.getElementById('unscrambleArea').style.display='block';
+    document.getElementById('resetBtn').style.display='inline-block';
+    document.getElementById('checkBtn').style.display='inline-block';
+    document.getElementById('checkBtn').disabled=false;
+
+    const item=unscrambles[qref.sourceIndex];
+    currentWords=[...item.words];
+    placedWords=[];
+    shuffle(currentWords);
+    renderWordTiles();
+  }
+}
+function checkMCQ(choice,button){
+  if(answered)return;
+  answered=true;
+  const item=mcqs[questionPool[index].sourceIndex];
+  const all=[...document.querySelectorAll('.option')];
+  all.forEach(b=>b.disabled=true);
+  const correct=choice===item.answer;
+  if(correct){
+    score++;
+    button.classList.add('correct');
+    showFeedback(true);
+  }else{
+    button.classList.add('incorrect');
+    all[item.answer].classList.add('correct');
+    showFeedback(false,item.options[item.answer]);
+  }
+  reviews.push({
+    number:globalQuestionNumber(),
+    user:item.options[choice],
+    correct:item.options[item.answer],
+    ok:correct
+  });
+  document.getElementById('scoreText').textContent=`Score: ${score}`;
+  document.getElementById('nextBtn').style.display='inline-block';
+}
+function showFeedback(ok,correctAnswer=''){
+  const box=document.getElementById('feedback');
+  if(ok){
+    const msg=positiveMessages[Math.floor(Math.random()*positiveMessages.length)];
+    box.className='feedback show good';
+    box.innerHTML=`<strong>✓ ${msg}</strong>`;
+  }else{
+    box.className='feedback show try';
+    box.innerHTML=`<strong>Good try!</strong><div>Correct answer: ${correctAnswer}</div>`;
+  }
+}
+function renderWordTiles(){
+  const bank=document.getElementById('wordBank');
+  const zone=document.getElementById('answerZone');
+  bank.innerHTML=''; zone.innerHTML='';
+
+  currentWords.forEach((w,i)=>{
+    bank.appendChild(makeWord(w,'bank',i));
+  });
+  placedWords.forEach((w,i)=>{
+    zone.appendChild(makeWord(w,'zone',i));
+  });
+
+  bank.ondragover=e=>e.preventDefault();
+  zone.ondragover=e=>e.preventDefault();
+
+  bank.ondrop=e=>{
+    e.preventDefault();
+    const data=JSON.parse(e.dataTransfer.getData('text/plain'));
+    if(data.from==='zone'){
+      currentWords.push(placedWords.splice(data.index,1)[0]);
+      renderWordTiles();
+    }
+  };
+  zone.ondrop=e=>{
+    e.preventDefault();
+    const data=JSON.parse(e.dataTransfer.getData('text/plain'));
+    if(data.from==='bank'){
+      placedWords.push(currentWords.splice(data.index,1)[0]);
+      renderWordTiles();
+    }
+  };
+}
+function makeWord(word,from,i){
+  const el=document.createElement('span');
+  el.className='word';
+  el.textContent=word;
+  el.draggable=true;
+  el.ondragstart=e=>{
+    e.dataTransfer.setData('text/plain',JSON.stringify({from,index:i}));
+  };
+  el.onclick=()=>{
+    if(answered)return;
+    if(from==='bank'){
+      placedWords.push(currentWords.splice(i,1)[0]);
+    }else{
+      currentWords.push(placedWords.splice(i,1)[0]);
+    }
+    renderWordTiles();
+  };
+  return el;
+}
+function resetUnscramble(){
+  if(answered)return;
+  currentWords=[...unscrambles[questionPool[index].sourceIndex].words];
+  placedWords=[];
+  shuffle(currentWords);
+  renderWordTiles();
+  document.getElementById('feedback').className='feedback';
+}
+function normalize(s){
+  return s.toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ').trim();
+}
+function checkUnscramble(){
+  if(answered)return;
+  const correct=unscrambles[questionPool[index].sourceIndex].answer;
+  const user=placedWords.join(' ').trim();
+  if(!user){
+    const box=document.getElementById('feedback');
+    box.className='feedback show try';
+    box.innerHTML='<strong>Good try!</strong><div>Please build a sentence first.</div>';
+    return;
+  }
+  answered=true;
+  document.getElementById('checkBtn').disabled=true;
+  const ok=normalize(user)===normalize(correct);
+  if(ok){score++;showFeedback(true)}
+  else{showFeedback(false,correct)}
+  reviews.push({number:globalQuestionNumber(),user:user+(user.endsWith('.')?'':'.'),correct,ok});
+  document.getElementById('scoreText').textContent=`Score: ${score}`;
+  document.getElementById('nextBtn').style.display='inline-block';
+}
+function nextQuestion(){
+  index++;
+  if(index>=30){
+    finishGame();
+  }else{
+    renderQuestion();
+  }
+}
+function finishGame(){
+  document.getElementById('progressBar').style.width='100%';
+  showResults();
+}
+function getResultMessage(s){
+  if(s>=27) return "Outstanding! You’re an Adverbs of Frequency Master!";
+  if(s>=23) return "Excellent work! You understand adverb placement very well.";
+  if(s>=18) return "Good job! A little more practice will make you even better.";
+  if(s>=12) return "Nice effort! Review the rules and try again.";
+  return "Keep practising! You’re making progress.";
+}
+function showResults(){
+  document.getElementById('finalScore').textContent=`${score} / 30`;
+  document.getElementById('resultMessage').textContent=getResultMessage(score);
+  showScreen('resultScreen');
+}
+function showReview(){
+  const list=document.getElementById('reviewList');
+  list.innerHTML='';
+  reviews.forEach(r=>{
+    const div=document.createElement('div');
+    div.className='review-item';
+    div.innerHTML=`
+      <h4>Question ${r.number} <span class="tag ${r.ok?'ok':'no'}">${r.ok?'Correct':'Review'}</span></h4>
+      <p><strong>Your answer:</strong> ${escapeHtml(r.user)}</p>
+      <p><strong>Correct answer:</strong> ${escapeHtml(r.correct)}</p>
+    `;
+    list.appendChild(div);
+  });
+  showScreen('reviewScreen');
+}
+function restartGame(){
+  score=0;index=0;answered=false;reviews=[];currentWords=[];placedWords=[];questionPool=[];
+  showScreen('startScreen');
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+}
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[m]));
+}
+</script>
+</body>
+</html>
